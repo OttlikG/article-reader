@@ -1,5 +1,6 @@
 import React from 'react'
 import ArticleView from '../component/ArticleView/ArticleView'
+import ArticleTimeline from '../component/ArticleTimeline/ArticleTimeline'
 
 const temporaryProps = {
 	imgSrc:
@@ -34,6 +35,7 @@ export default function App() {
 			<div className='row'>
 				<div className='col-xs-12 col-md-8 article-column'>
 					<ArticleView {...temporaryProps} />
+					<ArticleTimeline />
 				</div>
 			</div>
 		</div>

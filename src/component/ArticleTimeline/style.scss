@@ -1,0 +1,117 @@
+.article-timeline {
+	align-items: flex-start;
+	margin-right: auto;
+	margin-left: auto;
+	overflow: hidden;
+	margin-top: 10px;
+	background-color: #fff;
+  }
+  
+  .timeline-article {
+	position: relative;
+	background-color: #fff;
+  }
+  
+  .timeline-article .timeline-article-top-information {
+	position: relative;
+	font-size: 13px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	color: gray;
+  }
+  
+  .top-information-wrapper {
+	overflow: hidden;
+	height: 16px;
+  }
+  
+  .first-column .timeline-article-top-information::after, .second-column .timeline-article-top-information::after {
+	position: absolute;
+	content: '';
+	width: 5px;
+	height: 13px;
+	top: 9px;
+	background-color: #ff9900;
+  }
+  
+  .first-column .timeline-article-top-information::after {
+	right: -8px;
+  }
+  
+  .second-column .timeline-article-top-information::after {
+	left: -8px;
+  }
+  
+  .timeline-article .line {
+	position: absolute;
+	top: 50%;
+	width: 100%;
+	z-index: 0;
+	height: 1px;
+	
+	transform: translateY(-50%);
+	background-color: #dedede;
+  }
+  
+  .update-time {
+	font-size: 12px;
+	line-height: 16px;
+	text-transform: uppercase;
+	padding-right: 10px;
+	padding-left: 10px;
+  }
+  
+  .first-column .update-time {
+	position: relative;
+	float: right;
+	background-color: #fff;
+	z-index: 1;
+  }
+  
+  .timeline-tag {
+	position: relative;
+	float: right;
+	line-height: 15px;
+	background-color: #fff;
+	z-index: 0;
+	padding-right: 10px;
+	padding-left: 10px;
+  }
+  
+  .first-column .timeline-tag {
+	float: left;
+  }
+  
+  .timeline-tag-content {
+	padding: 1px 5px;
+	background-color: #ff9900;
+	color: #fff;
+	font-size: 10px;
+	user-select: none;
+	text-transform: uppercase;
+  }
+  
+  .recent-article-body {
+	padding: 10px;
+  }
+  
+  .first-column {
+	border-right: 1px solid #dedede;
+  }
+  
+  /* MASONRY STYLE */
+  
+  .masonry-root {
+	display: flex;
+	flex-flow: column wrap;
+  }
+  
+  .masonry-cell {
+	flex: 1;
+  }
+  
+  .article-wrapper {
+	height: auto;
+  }
+  
+  /* MASONRY STYLE END */
