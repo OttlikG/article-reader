@@ -1,3 +1,4 @@
+import { format, formatDistanceToNow } from 'date-fns'
 import { TimelineArticle } from '../../component/ArticleTimeline/ArticleTimeline'
 
 export declare interface ArticleFromResponse {
@@ -22,7 +23,7 @@ export const transformMainArticle = (article: ArticleFromResponse) => {
 			name: article.author,
 		},
 		articleHeading: article.title,
-		articleTime: article.publishedAt,
+		articleTime: format(new Date(article.publishedAt), 'y-M-d H:m'),
 		articleSummary: article.description,
 		follow: {
 			twitter: {
@@ -38,7 +39,7 @@ export const transformMainArticle = (article: ArticleFromResponse) => {
 export const transformTimelineArticles = (articles: ArticleFromResponse[]): TimelineArticle[] => {
 	return articles.map(article => {
 		return {
-			updateTime: article.publishedAt,
+			updateTime: formatDistanceToNow(new Date(article.publishedAt)),
 			topInformationTag: article.source.name,
 			imgSrc: article.urlToImage,
 			articleHeadline: article.title,
