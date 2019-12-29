@@ -42,7 +42,7 @@ export const transformTimelineArticles = (articles: ArticleFromResponse[]): Time
 			topInformationTag: article.source.name,
 			imgSrc: article.urlToImage,
 			articleHeadline: article.title,
-			articleBody: article.description
+			articleBody: decodeURI(article.description)
 		}
 	})
 }
