@@ -173,6 +173,14 @@ button::moz-focus-inner {
 
 @media (min-width: 48rem) and (max-width: 75rem) {
 	.text-article .article-headline {
+		font-size: 20px;
+		line-height: 28px;
+	}
+}
+
+@media (min-width: 48em) {
+	.heading-text .article-headline {
+		font-size: 20px;
 		line-height: 28px;
 	}
 }
