@@ -28,7 +28,7 @@ describe('ArticlePage', () => {
 			description: 'Article description',
 			url: 'http://article.com',
 			urlToImage: 'http://placeholder.com',
-			publishedAt: '27th December 2019',
+			publishedAt: 'Sun Dec 29 2019 10:12:05 GMT+0100',
 			content: 'This is a content'
 		}
 	})

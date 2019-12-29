@@ -26,7 +26,7 @@ export default function ArticleView(props: ArticleViewProps) {
 			<div className='article-heading'>
 				<img src={props.imgSrc} alt={props.articleHeading} />
 				<div className='heading-text'>
-					<h1><span className='article-headline article-headline--heighlight'>{props.articleHeading}</span></h1>
+					<h1><span className='article-headline article-headline--highlight'>{props.articleHeading}</span></h1>
 				</div>
 			</div>
 			<div className='article-details clearfix'>
