@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import cn from 'classnames'
 import './style.scss'
 
@@ -15,6 +15,12 @@ declare interface ArticleTimelineProps {
 }
 
 export default function ArticleTimeline(props: ArticleTimelineProps) {
+	useEffect(() => {
+		if (props.timelineArticles.length > 0) {
+			require('./articleTimelineMasonry.js')
+		}
+	}, [props.timelineArticles])
+
 	function renderArticle(article: TimelineArticle, index: number) {
 		return (
 			<article className={cn('col-xs-12 col-sm-6 masonry-cell timeline-article', {
