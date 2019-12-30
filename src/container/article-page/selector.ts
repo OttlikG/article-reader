@@ -23,7 +23,7 @@ export const transformMainArticle = (article: ArticleFromResponse) => {
 			name: article.author,
 		},
 		articleHeading: article.title,
-		articleTime: format(new Date(article.publishedAt), 'y-M-d H:m'),
+		articleTime: format(new Date(article.publishedAt), 'y-M-d H:mm'),
 		articleSummary: article.description,
 		follow: {
 			twitter: {
@@ -43,7 +43,7 @@ export const transformTimelineArticles = (articles: ArticleFromResponse[]): Time
 			topInformationTag: article.source.name,
 			imgSrc: article.urlToImage,
 			articleHeadline: article.title,
-			articleBody: decodeURI(article.description)
+			articleBody: article.description
 		}
 	})
 }

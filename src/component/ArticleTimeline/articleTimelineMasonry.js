@@ -24,11 +24,10 @@ function onLoad() {
 			cells
 		}
 	})
-
-	onResize()
 }
 
 function onResize() {
+	onLoad()
 	roots.forEach(root => {
 		const newNoOfColumns = getComputedStyle(root.cells[0].element).maxWidth === '50%' ? 2 : 1
 		root.noOfColumns = newNoOfColumns
@@ -40,8 +39,9 @@ function onResize() {
 			}
 		})
 
-		root.cells.forEach(cell => {
-			const minOuterHeight = Math.min(...columns.map(column => column.outerHeight))
+		root.cells.forEach((cell, index) => {
+			let minOuterHeight = Math.min(...columns.map(column => column.outerHeight))
+
 			const column = columns.find(column => column.outerHeight === minOuterHeight)
 
 			const columnIndex = columns.findIndex(column => column.outerHeight === minOuterHeight)
@@ -54,7 +54,7 @@ function onResize() {
 			column.cells.push(cell)
 			column.outerHeight += getOuterHeight(cell.element)
 		})
-
+		
 		const masonryHeight = Math.max(...columns.map(column => column.outerHeight))
 
 		let order = 0
@@ -66,12 +66,14 @@ function onResize() {
 
 			const articleWrapper = column.cells[column.cells.length - 1].element.querySelector('.article-wrapper')
 			const flexBasis = articleWrapper.offsetHeight + masonryHeight - column.outerHeight - 1 + 'px'
-			column.cells[column.cells.length - 1].element.style.flexBasis = flexBasis
+			column.cells[column.cells.length - 1].element.style.flexBasis = masonryHeight - column.outerHeight === 0 ? 0 : flexBasis
 		})
 
-		root.element.style.maxHeight = masonryHeight + 1 + 'px'
+		root.element.style.maxHeight = masonryHeight + 20 + 'px'
 	})
 }
 
-onLoad()
-window.addEventListener('resize', onResize)
+setTimeout(() => {
+	onResize()
+	window.addEventListener('resize', onResize)
+}, 100)
