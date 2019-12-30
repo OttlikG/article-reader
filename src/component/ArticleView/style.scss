@@ -160,7 +160,7 @@ button::moz-focus-inner {
 	padding: 10px;
 }
 
-@media (max-width: 35rem) {
+@media (max-width: 30rem) {
 	.heading-text {
 		bottom: 10px;
 	}
@@ -171,7 +171,7 @@ button::moz-focus-inner {
 	}
 }
 
-@media (min-width: 48rem) and (max-width: 75rem) {
+@media (min-width: 48em) and (max-width: 75em) {
 	.text-article .article-headline {
 		font-size: 20px;
 		line-height: 28px;
@@ -179,7 +179,7 @@ button::moz-focus-inner {
 }
 
 @media (min-width: 48em) {
-	.heading-text .article-headline {
+	.timeline-article .article-headline {
 		font-size: 20px;
 		line-height: 28px;
 	}
