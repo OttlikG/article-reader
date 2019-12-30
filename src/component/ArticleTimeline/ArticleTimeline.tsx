@@ -18,6 +18,13 @@ export default function ArticleTimeline(props: ArticleTimelineProps) {
 	useEffect(() => {
 		if (props.timelineArticles.length > 0) {
 			require('./articleTimelineMasonry.js')
+
+			const images = document.querySelectorAll('.article-heading img')
+			Array.prototype.forEach.call(images, function (image) {
+				if (!image.complete) {
+					image.style.display = 'none'
+				}
+			})
 		}
 	}, [props.timelineArticles])
 
