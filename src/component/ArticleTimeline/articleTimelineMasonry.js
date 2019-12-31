@@ -73,7 +73,9 @@ function onResize() {
 	})
 }
 
-setTimeout(() => {
-	onResize()
-	window.addEventListener('resize', onResize)
-}, 100)
+export default () => {
+	setTimeout(() => {
+		onResize()
+		window.addEventListener('resize', onResize)
+	}, 100)
+}

@@ -17,7 +17,10 @@ declare interface ArticleTimelineProps {
 export default function ArticleTimeline(props: ArticleTimelineProps) {
 	useEffect(() => {
 		if (props.timelineArticles.length > 0) {
-			require('./articleTimelineMasonry.js')
+			const initArticleTimelineMasonry = require('./articleTimelineMasonry.js').default
+			initArticleTimelineMasonry()
+		}
+	}, [props.timelineArticles])
 
 			const images = document.querySelectorAll('.article-heading img')
 			Array.prototype.forEach.call(images, function (image) {
