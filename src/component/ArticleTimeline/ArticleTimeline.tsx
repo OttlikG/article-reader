@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, SyntheticEvent } from 'react'
 import cn from 'classnames'
 import './style.scss'
 
@@ -22,14 +22,10 @@ export default function ArticleTimeline(props: ArticleTimelineProps) {
 		}
 	}, [props.timelineArticles])
 
-			const images = document.querySelectorAll('.article-heading img')
-			Array.prototype.forEach.call(images, function (image) {
-				if (!image.complete) {
-					image.style.display = 'none'
-				}
-			})
-		}
-	}, [props.timelineArticles])
+	function handleImageError(error: SyntheticEvent<any>) {
+		error.currentTarget.style.display = 'none'
+		error.currentTarget.closest('article').classList.add('text-article')
+	}
 
 	function renderArticle(article: TimelineArticle, index: number) {
 		return (
@@ -48,7 +44,7 @@ export default function ArticleTimeline(props: ArticleTimelineProps) {
 					</h1>
 					<div className='recent-article'>
 						<div className='article-heading'>
-							{article.imgSrc && <img src={article.imgSrc} alt={article.articleHeadline} />}
+							{article.imgSrc && <img src={article.imgSrc} alt={article.articleHeadline} onError={handleImageError} />}
 							<div className='heading-text'>
 								<h1><span data-testid='article-headline' className='article-headline article-headline--highlight'>{article.articleHeadline}</span></h1>
 							</div>

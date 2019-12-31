@@ -1,29 +1,65 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import ArticleTimeline from './ArticleTimeline'
+import { shallow, mount } from 'enzyme'
+import ArticleTimeline, { TimelineArticle } from './ArticleTimeline'
+import articleTimelineMasonry from './articleTimelineMasonry'
+
+jest.mock('./articleTimelineMasonry.js')
 
 describe('ArticleTimeline', () => {
+	let article: TimelineArticle
+
+	beforeEach(() => {
+		article = {
+			imgSrc: 'https://placeholder.com',
+			updateTime: '2019 12 29',
+			topInformationTag: 'Index',
+			articleHeadline: 'Test article',
+			articleBody: 'Lorem ipsum'
+		}
+	})
+
 	it('should not throw when there is 0 article', () => {
 		const component = shallow(<ArticleTimeline timelineArticles={[]} />)
 		expect(() => component).not.toThrow()
 	})
 
 	it('should display important timeline article information', () => {
-		const article = {
-			imgSrc: 'https://placeholder.com',
-			updateTime: 10,
-			topInformationTag: 'CNN',
-			articleHeadline: 'Test article',
-			articleBody: 'Lorem ipsum',
-		}
 		const component = shallow(<ArticleTimeline timelineArticles={[article]} />)
 		const timelineArticles = component.find('article')
 		const articleComponent = component.find({ 'data-testid': `timeline-article-0` })
 
 		expect(timelineArticles.length).toBe(1)
-		expect(articleComponent.find('.update-time').text()).toBe('10')
-		expect(articleComponent.find('.timeline-tag-content').text()).toBe('CNN')
+		expect(articleComponent.find('.update-time').text()).toBe('2019 12 29')
+		expect(articleComponent.find('.timeline-tag-content').text()).toBe('Index')
 		expect(articleComponent.find('.article-headline').text()).toBe('Test article')
 		expect(articleComponent.find('.recent-article-body').text()).toBe('Lorem ipsum')
+	})
+
+	it('handle error on image load', () => {
+		const component = shallow(<ArticleTimeline timelineArticles={[article]} />)
+
+		const imgProps = component.find({ 'data-testid': 'timeline-article-0' }).find('.article-heading img').props()
+		const add = jest.fn()
+		const event = {
+			currentTarget: {
+				style: { display: ''},
+				closest: jest.fn(() => ({
+					classList: {
+						add
+					}
+				}))
+			}
+		}
+
+		imgProps.onError(event)
+
+		expect(event.currentTarget.style.display).toBe('none')
+		expect(event.currentTarget.closest).toHaveBeenCalled()
+		expect(add).toHaveBeenCalledWith('text-article')
+	})
+
+	it('should load articleTimelineMasonry script when articles are loaded', () => {
+		mount(<ArticleTimeline timelineArticles={[article]} />)
+		expect(articleTimelineMasonry).toHaveBeenCalled()
 	})
 })
