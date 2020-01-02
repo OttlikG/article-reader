@@ -44,7 +44,7 @@ export default function ArticleTimeline(props: ArticleTimelineProps) {
 					</h1>
 					<div className='recent-article'>
 						<div className='article-heading'>
-							{article.imgSrc && <img src={article.imgSrc} alt={article.articleHeadline} onError={handleImageError} />}
+							{article.imgSrc && <img onError={handleImageError} className='article-heading-image' src={article.imgSrc} alt={article.articleHeadline} />}
 							<div className='heading-text'>
 								<h1><span data-testid='article-headline' className='article-headline article-headline--highlight'>{article.articleHeadline}</span></h1>
 							</div>

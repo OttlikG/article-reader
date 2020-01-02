@@ -45,7 +45,7 @@ function onResize() {
 			const column = columns.find(column => column.outerHeight === minOuterHeight)
 
 			const columnIndex = columns.findIndex(column => column.outerHeight === minOuterHeight)
-			if (root.noOfColums === 2) {
+			if (root.noOfColumns === 2) {
 				cell.element.classList.add(columnIndex % 2 === 0 ? 'first-column' : 'second-column')
 			} else {
 				cell.element.classList.remove(...['first-column', 'second-column'])
@@ -74,8 +74,24 @@ function onResize() {
 }
 
 export default () => {
-	setTimeout(() => {
-		onResize()
-		window.addEventListener('resize', onResize)
-	}, 100)
+	const roots = document.querySelectorAll('.masonry-root')
+	let isReadyForLayoutInit = false
+	let intervalId
+
+	intervalId = setInterval(() => {
+		isReadyForLayoutInit = [...roots].map(root => {
+			debugger
+			const images = root.querySelectorAll('.masonry-cell .article-heading img');
+			return [...images].map(image => {
+				return image.complete
+			}).every(e => e)
+		}).every(e => e)
+
+		if (isReadyForLayoutInit) {
+			clearInterval(intervalId)
+
+			onResize()
+			window.addEventListener('resize', onResize)
+		}
+	}, 400)
 }
