@@ -16,11 +16,37 @@ declare interface ArticleTimelineProps {
 
 export default function ArticleTimeline(props: ArticleTimelineProps) {
 	useEffect(() => {
-		if (props.timelineArticles.length > 0) {
-			const initArticleTimelineMasonry = require('./articleTimelineMasonry.js').default
-			initArticleTimelineMasonry()
-		}
+		const initArticleTimelineMasonry = require('./articleTimelineMasonry.js').default
+		initArticleTimelineMasonry()
 	}, [props.timelineArticles])
+
+	useEffect(() => {
+		const roots = document.querySelectorAll('.masonry-root');
+		const observers = [] as IntersectionObserver[]
+
+		if (roots.length) {
+			for (let i = 0; i < roots.length; i++) {
+				const observer = new IntersectionObserver(([entry]) => {
+					debugger
+					if (entry && entry.isIntersecting) {
+						console.log('isIntersecting', entry.isIntersecting)
+					}
+				})
+
+				const cells = roots[i].querySelectorAll('.masonry-cell')
+				const lastItem = cells[cells.length - 1] as Element
+
+				observer.observe(lastItem)
+				observers.push(observer)
+			}
+		}
+
+		return () => {
+			observers.forEach(observer => {
+				observer.disconnect()
+			})
+		}
+	}, [])
 
 	function handleImageError(error: SyntheticEvent<any>) {
 		error.currentTarget.style.display = 'none'
@@ -57,6 +83,7 @@ export default function ArticleTimeline(props: ArticleTimelineProps) {
 			</article>
 		)
 	}
+
 
 	return (
 		<div className='row article-timeline masonry-root'>

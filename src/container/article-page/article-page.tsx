@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import ArticleView from '../../component/ArticleView/ArticleView'
 import ArticleTimeline, { TimelineArticle } from '../../component/ArticleTimeline/ArticleTimeline'
 import {
@@ -37,7 +37,7 @@ export default function App() {
 				<div className='col-xs-12 col-md-8 article-column'>
 					<a href='https://newsapi.org'>Powered by NewsAPI.org</a>
 					<ArticleView {...mainArticle} />
-					<ArticleTimeline timelineArticles={timelineArticles} />
+					{!!timelineArticles.length && <ArticleTimeline timelineArticles={timelineArticles} />}
 				</div>
 			</div>
 		</div>

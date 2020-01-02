@@ -80,7 +80,6 @@ export default () => {
 
 	intervalId = setInterval(() => {
 		isReadyForLayoutInit = [...roots].map(root => {
-			debugger
 			const images = root.querySelectorAll('.masonry-cell .article-heading img');
 			return [...images].map(image => {
 				return image.complete
