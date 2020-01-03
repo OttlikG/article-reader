@@ -1,45 +1,80 @@
-import React, { useState, useEffect, useContext } from 'react'
-import ArticleView from '../../component/ArticleView/ArticleView'
-import ArticleTimeline, { TimelineArticle } from '../../component/ArticleTimeline/ArticleTimeline'
-import {
-	transformMainArticle,
-	transformTimelineArticles
-} from './selector'
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { subDays } from 'date-fns'
+import ArticleView from "../../component/ArticleView/ArticleView";
+import ArticleTimeline from "../../component/ArticleTimeline/ArticleTimeline";
+import { transformMainArticle, transformTimelineArticles, ArticleFromResponse } from "./selector";
+import parseQueryParams from '../../utils/parse-query-params'
 
-export default function App() {
-	const [mainArticle, setMainArticle] = useState({})
-	const [timelineArticles, setTimelineArticles] = useState([] as TimelineArticle[])
+function usePagination(
+	hostname: string
+) {
+	const [articles, setArticles] = useState([] as ArticleFromResponse[]);
+	const [window, setWindow] = useState(1);
+	const [requestError, setRequestError] = useState()
+	const fromDate = useMemo(() => subDays(new Date(), 1), [])
+	
+	const queryString = parseQueryParams({
+		from: subDays(fromDate, window - 1).toISOString(),
+		sources: 'cnn',
+		page: String(window)
+	})
 
 	useEffect(() => {
-		const fetchArticles = async () => {
+		const fetchArticle = async (url: string) => {
 			try {
-				const query = `country=us&apiKey=${process.env.REACT_APP_NEWS_API}`
-				const response = await fetch(`https://newsapi.org/v2/top-headlines?${query}`)
-				const data = await response.json()
+				let data = await fetch(url, {
+					headers: {
+						Authorization: `Bearer ${process.env.REACT_APP_NEWS_API}`
+					}
+				});
+				
+				if (data.status === 200) {
+					const { articles } = await data.json();
 
-				const transformedMainArticle = transformMainArticle(data.articles[0])
-				const transformedTimelineArticles = transformTimelineArticles(data.articles.slice(1))
+					setArticles(a => a.concat(articles));
+				}
 
-				setMainArticle(transformedMainArticle)
-				setTimelineArticles(transformedTimelineArticles)
+				if (data.status >= 400 && data.status < 500) {
+					setRequestError(data.status)
+				}
 			} catch (error) {
-				console.error(error)
-				return []
+				console.log(error)
 			}
-		}
+		};
 
-		fetchArticles()
-	}, [])
+		const url = `${hostname}?${queryString}`
+		fetchArticle(url);
+	}, [hostname, queryString, window]);
+
+	return {
+		articles,
+		requestError,
+		setWindow
+	};
+}
+
+export default function App() {
+	const { articles, setWindow, requestError }: { articles: ArticleFromResponse[], setWindow: Function, requestError: number } = usePagination(`https://newsapi.org/v2/everything/`)
+	const mainArticle = transformMainArticle(articles[0])
+	const timelineArticles = transformTimelineArticles(articles.slice(1))
+
+	debugger
+
+	const loadArticlesOnScroll = useCallback(() => {
+		!requestError && setWindow((window: number) => window + 1)
+	}, [requestError, setWindow])
 
 	return (
-		<div className='article-page container'>
-			<div className='row'>
-				<div className='col-xs-12 col-md-8 article-column'>
-					<a href='https://newsapi.org'>Powered by NewsAPI.org</a>
+		<div className="article-page container">
+			<div className="row">
+				<div className="col-xs-12 col-md-8 article-column">
+					<a href="https://newsapi.org">Powered by NewsAPI.org</a>
 					<ArticleView {...mainArticle} />
-					{!!timelineArticles.length && <ArticleTimeline timelineArticles={timelineArticles} />}
+					{!!timelineArticles.length && (
+						<ArticleTimeline timelineArticles={timelineArticles} loadArticlesOnScroll={loadArticlesOnScroll} />
+					)}
 				</div>
 			</div>
 		</div>
-	)
+	);
 }

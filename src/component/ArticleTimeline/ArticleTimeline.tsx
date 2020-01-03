@@ -7,18 +7,27 @@ export declare interface TimelineArticle {
 	topInformationTag?: string,
 	imgSrc: string,
 	articleHeadline: string,
-	articleBody: string
+	articleBody: string,
 }
 
 declare interface ArticleTimelineProps {
-	timelineArticles: TimelineArticle[]
+	timelineArticles: TimelineArticle[],
+	loadArticlesOnScroll(): void
 }
 
-export default function ArticleTimeline(props: ArticleTimelineProps) {
+function ArticleTimeline(props: ArticleTimelineProps) {
+	debugger
+	const {
+		timelineArticles,
+		loadArticlesOnScroll
+	} = props
+
+	debugger
+
 	useEffect(() => {
 		const initArticleTimelineMasonry = require('./articleTimelineMasonry.js').default
 		initArticleTimelineMasonry()
-	}, [props.timelineArticles])
+	}, [timelineArticles])
 
 	useEffect(() => {
 		const roots = document.querySelectorAll('.masonry-root');
@@ -28,25 +37,23 @@ export default function ArticleTimeline(props: ArticleTimelineProps) {
 			for (let i = 0; i < roots.length; i++) {
 				const observer = new IntersectionObserver(([entry]) => {
 					debugger
+					(entry.target as HTMLElement).style['backgroundColor'] = 'red'
 					if (entry && entry.isIntersecting) {
-						console.log('isIntersecting', entry.isIntersecting)
+						debugger
+						observer.disconnect()
+						loadArticlesOnScroll()
 					}
 				})
+
+				debugger
 
 				const cells = roots[i].querySelectorAll('.masonry-cell')
 				const lastItem = cells[cells.length - 1] as Element
 
 				observer.observe(lastItem)
-				observers.push(observer)
 			}
 		}
-
-		return () => {
-			observers.forEach(observer => {
-				observer.disconnect()
-			})
-		}
-	}, [])
+	}, [timelineArticles.length])
 
 	function handleImageError(error: SyntheticEvent<any>) {
 		error.currentTarget.style.display = 'none'
@@ -87,7 +94,9 @@ export default function ArticleTimeline(props: ArticleTimelineProps) {
 
 	return (
 		<div className='row article-timeline masonry-root'>
-			{props.timelineArticles.map(renderArticle)}
+			{timelineArticles.map(renderArticle)}
 		</div>
 	)
 }
+
+export default React.memo(ArticleTimeline)
