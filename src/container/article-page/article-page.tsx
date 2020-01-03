@@ -56,7 +56,7 @@ function usePagination(
 export default function App() {
 	const { articles, setWindow, requestError }: { articles: ArticleFromResponse[], setWindow: Function, requestError: number } = usePagination(`https://newsapi.org/v2/everything/`)
 	const mainArticle = transformMainArticle(articles[0])
-	const timelineArticles = transformTimelineArticles(articles.slice(1))
+	const timelineArticles = transformTimelineArticles(articles.slice(1)).filter(article => articles.some(a => article))
 
 	debugger
 
