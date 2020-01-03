@@ -43,6 +43,8 @@ function ArticleTimeline(props: ArticleTimelineProps) {
 						observer.disconnect()
 						loadArticlesOnScroll()
 					}
+				}, {
+					rootMargin: '300px'
 				})
 
 				debugger
