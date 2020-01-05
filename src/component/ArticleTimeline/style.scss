@@ -103,9 +103,8 @@
 
 /* MASONRY STYLE */
 
-.masonry-root {
+.column-wrapper {
 	display: flex;
-	flex-flow: column wrap;
 }
 
 .masonry-cell {
@@ -114,6 +113,11 @@
 
 .article-wrapper {
 	height: auto;
+}
+
+.initial-cells {
+	position: absolute;
+	visibility: hidden;
 }
 
 /* MASONRY STYLE END */

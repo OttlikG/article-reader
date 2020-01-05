@@ -43,7 +43,13 @@ export const transformTimelineArticles = (articles: ArticleFromResponse[]): Time
 			topInformationTag: article.source.name,
 			imgSrc: article.urlToImage,
 			articleHeadline: article.title,
-			articleBody: article.description
+			articleBody: article.description,
+			unixTime: new Date(article.publishedAt).getTime()
 		}
+	}).sort((a, b) => {
+		if (a.unixTime > b.unixTime) return -1
+		if (a.unixTime < b.unixTime) return 1
+		
+		return 0
 	})
 }

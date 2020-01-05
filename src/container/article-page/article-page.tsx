@@ -9,14 +9,14 @@ function usePagination(
 	hostname: string
 ) {
 	const [articles, setArticles] = useState([] as ArticleFromResponse[]);
-	const [window, setWindow] = useState(1);
+	const [windowCount, setWindowCount] = useState(1);
 	const [requestError, setRequestError] = useState()
 	const fromDate = useMemo(() => subDays(new Date(), 1), [])
 	
 	const queryString = parseQueryParams({
-		from: subDays(fromDate, window - 1).toISOString(),
+		from: subDays(fromDate, windowCount - 1).toISOString(),
 		sources: 'cnn',
-		page: String(window)
+		page: String(windowCount)
 	})
 
 	useEffect(() => {
@@ -44,25 +44,33 @@ function usePagination(
 
 		const url = `${hostname}?${queryString}`
 		fetchArticle(url);
-	}, [hostname, queryString, window]);
+	}, [hostname, queryString, windowCount]);
 
 	return {
 		articles,
 		requestError,
-		setWindow
+		setWindowCount
 	};
 }
 
 export default function App() {
-	const { articles, setWindow, requestError }: { articles: ArticleFromResponse[], setWindow: Function, requestError: number } = usePagination(`https://newsapi.org/v2/everything/`)
+	const [size, setSize] = useState(15)
+	const { articles, setWindowCount, requestError }: { articles: ArticleFromResponse[], setWindowCount: Function, requestError: number } = usePagination(`https://newsapi.org/v2/everything/`)
 	const mainArticle = transformMainArticle(articles[0])
-	const timelineArticles = transformTimelineArticles(articles.slice(1)).filter(article => articles.some(a => article))
 
-	debugger
+	const uniqueArticles = articles.filter((article, index, self) => {
+		return self.findIndex(a => a.title === article.title) === index
+	})
+
+	const timelineArticles = transformTimelineArticles(uniqueArticles)
+
+	const increaseSize = useCallback(() => {
+		setSize(size => size + 5)
+	}, [])
 
 	const loadArticlesOnScroll = useCallback(() => {
-		!requestError && setWindow((window: number) => window + 1)
-	}, [requestError, setWindow])
+		!requestError && setWindowCount((windowCount: number) => windowCount + 1)
+	}, [requestError, setWindowCount])
 
 	return (
 		<div className="article-page container">
@@ -73,6 +81,8 @@ export default function App() {
 					{!!timelineArticles.length && (
 						<ArticleTimeline timelineArticles={timelineArticles} loadArticlesOnScroll={loadArticlesOnScroll} />
 					)}
+					<button onClick={loadArticlesOnScroll}>Load more</button>
+					<button onClick={increaseSize}>Add 5 more</button>
 				</div>
 			</div>
 		</div>
