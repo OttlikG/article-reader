@@ -54,7 +54,6 @@ function usePagination(
 }
 
 export default function App() {
-	const [size, setSize] = useState(15)
 	const { articles, setWindowCount, requestError }: { articles: ArticleFromResponse[], setWindowCount: Function, requestError: number } = usePagination(`https://newsapi.org/v2/everything/`)
 	const mainArticle = transformMainArticle(articles[0])
 
@@ -63,10 +62,6 @@ export default function App() {
 	})
 
 	const timelineArticles = transformTimelineArticles(uniqueArticles)
-
-	const increaseSize = useCallback(() => {
-		setSize(size => size + 5)
-	}, [])
 
 	const loadArticlesOnScroll = useCallback(() => {
 		!requestError && setWindowCount((windowCount: number) => windowCount + 1)
@@ -82,7 +77,6 @@ export default function App() {
 						<ArticleTimeline timelineArticles={timelineArticles} loadArticlesOnScroll={loadArticlesOnScroll} />
 					)}
 					<button onClick={loadArticlesOnScroll}>Load more</button>
-					<button onClick={increaseSize}>Add 5 more</button>
 				</div>
 			</div>
 		</div>

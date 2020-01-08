@@ -76,7 +76,7 @@ function ArticleTimeline(props: ArticleTimelineProps) {
 				(container as HTMLElement).removeEventListener('layoutTimelineFinished', () => installObserverOnLastArticle)
 			})
 		}
-	}, [timelineArticles.length])
+	}, [timelineArticles.length, loadArticlesOnScroll])
 
 	useEffect(() => {
 		const cellElements = document.querySelectorAll('.masonry-root .initial-cells .masonry-cell')
