@@ -10,7 +10,7 @@ export declare interface TimelineArticle {
 	articleBody: string,
 }
 
-declare interface ArticleTimelineProps {
+export declare interface ArticleTimelineProps {
 	timelineArticles: TimelineArticle[],
 	loadArticlesOnScroll(): void
 }
@@ -52,7 +52,7 @@ function ArticleTimeline(props: ArticleTimelineProps) {
 					loadArticlesOnScroll()
 				}
 			}, {
-				rootMargin: '300px'
+				rootMargin: '800px'
 			})
 			window.globalObserver.push(observer)
 
@@ -180,7 +180,6 @@ function ArticleTimeline(props: ArticleTimelineProps) {
 			</article>
 		)
 	}
-
 
 	return (
 		<div className='row article-timeline masonry-root'>
