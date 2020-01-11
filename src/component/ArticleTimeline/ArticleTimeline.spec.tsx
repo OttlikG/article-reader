@@ -1,11 +1,9 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
-import ArticleTimeline, { TimelineArticle } from './ArticleTimeline'
-import articleTimelineMasonry from './articleTimelineMasonry'
-
-jest.mock('./articleTimelineMasonry.js')
+import { shallow } from 'enzyme'
+import ArticleTimeline, { TimelineArticle, ArticleTimelineProps } from './ArticleTimeline'
 
 describe('ArticleTimeline', () => {
+	let props: ArticleTimelineProps
 	let article: TimelineArticle
 
 	beforeEach(() => {
@@ -16,15 +14,20 @@ describe('ArticleTimeline', () => {
 			articleHeadline: 'Test article',
 			articleBody: 'Lorem ipsum'
 		}
+		props = {
+			timelineArticles: [article],
+			loadArticlesOnScroll: jest.fn()
+		}
 	})
 
 	it('should not throw when there is 0 article', () => {
-		const component = shallow(<ArticleTimeline timelineArticles={[]} />)
+		props.timelineArticles = []
+		const component = shallow(<ArticleTimeline {...props} />)
 		expect(() => component).not.toThrow()
 	})
 
 	it('should display important timeline article information', () => {
-		const component = shallow(<ArticleTimeline timelineArticles={[article]} />)
+		const component = shallow(<ArticleTimeline {...props} />)
 		const timelineArticles = component.find('article')
 		const articleComponent = component.find({ 'data-testid': `timeline-article-0` })
 
@@ -36,9 +39,8 @@ describe('ArticleTimeline', () => {
 	})
 
 	it('handle error on image load', () => {
-		const component = shallow(<ArticleTimeline timelineArticles={[article]} />)
-
-		const imgProps = component.find({ 'data-testid': 'timeline-article-0' }).find('.article-heading img').props()
+		const component = shallow(<ArticleTimeline {...props} />)
+		const imgProps = component.find({ 'data-testid': 'timeline-article-0' }).find('.article-heading img').props() as {onError: Function}
 		const add = jest.fn()
 		const event = {
 			currentTarget: {
@@ -56,10 +58,5 @@ describe('ArticleTimeline', () => {
 		expect(event.currentTarget.style.display).toBe('none')
 		expect(event.currentTarget.closest).toHaveBeenCalled()
 		expect(add).toHaveBeenCalledWith('text-article')
-	})
-
-	it('should load articleTimelineMasonry script when articles are loaded', () => {
-		mount(<ArticleTimeline timelineArticles={[article]} />)
-		expect(articleTimelineMasonry).toHaveBeenCalled()
 	})
 })
