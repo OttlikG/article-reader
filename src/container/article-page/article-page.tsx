@@ -9,6 +9,7 @@ function usePagination(
 	hostname: string
 ) {
 	const [articles, setArticles] = useState([] as ArticleFromResponse[]);
+	const [mainArticle, setMainArticle] = useState()
 	const [windowCount, setWindowCount] = useState(1);
 	const [requestError, setRequestError] = useState()
 	const fromDate = useMemo(() => subDays(new Date(), 1), [])
@@ -31,7 +32,13 @@ function usePagination(
 				if (data.status === 200) {
 					const { articles } = await data.json();
 
-					setArticles(a => a.concat(articles));
+					if (!mainArticle) {
+						setMainArticle(articles[0])
+						setArticles(a => a.concat(articles.slice(1, articles.length)))
+					} else {
+						setArticles((a) => a.concat(articles))
+					}
+
 				}
 
 				if (data.status >= 400 && data.status < 500) {
@@ -47,6 +54,7 @@ function usePagination(
 	}, [hostname, queryString, windowCount]);
 
 	return {
+		mainArticle,
 		articles,
 		requestError,
 		setWindowCount
@@ -54,14 +62,14 @@ function usePagination(
 }
 
 export default function App() {
-	const { articles, setWindowCount, requestError }: { articles: ArticleFromResponse[], setWindowCount: Function, requestError: number } = usePagination(`https://newsapi.org/v2/everything/`)
-	const mainArticle = transformMainArticle(articles[0])
+	const { mainArticle, articles, setWindowCount, requestError }: { mainArticle: ArticleFromResponse, articles: ArticleFromResponse[], setWindowCount: Function, requestError: number } = usePagination(`https://newsapi.org/v2/everything`)
 
 	const uniqueArticles = articles.filter((article, index, self) => {
 		return self.findIndex(a => a.title === article.title) === index
 	})
 
 	const timelineArticles = transformTimelineArticles(uniqueArticles)
+	const transformedMainArticle = transformMainArticle(mainArticle)
 
 	const loadArticlesOnScroll = useCallback(() => {
 		!requestError && setWindowCount((windowCount: number) => windowCount + 1)
@@ -72,7 +80,7 @@ export default function App() {
 			<div className="row">
 				<div className="col-xs-12 col-md-8 article-column">
 					<a href="https://newsapi.org">Powered by NewsAPI.org</a>
-					<ArticleView {...mainArticle} />
+					<ArticleView {...transformedMainArticle} />
 					{!!timelineArticles.length && (
 						<ArticleTimeline timelineArticles={timelineArticles} loadArticlesOnScroll={loadArticlesOnScroll} />
 					)}

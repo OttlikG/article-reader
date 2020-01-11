@@ -15,7 +15,26 @@ export declare interface ArticleFromResponse {
 	content: string
 }
 
-export const transformMainArticle = (article: ArticleFromResponse) => {
+export interface TransformedMainArticle {
+	imgSrc: string,
+	author: {
+		imgSrc: string,
+		name: string
+	},
+	articleHeading: string,
+	articleTime: string,
+	articleSummary: string,
+	follow: {
+		twitter: {
+			shareCount: number
+		},
+		facebook: {
+			shareCount: number
+		}
+	}
+}
+
+export const transformMainArticle = (article: ArticleFromResponse): TransformedMainArticle => {
 	return {
 		imgSrc: article?.urlToImage,
 		author: {
