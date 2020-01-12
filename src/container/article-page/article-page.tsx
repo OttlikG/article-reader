@@ -51,7 +51,7 @@ function usePagination(
 
 		const url = `${hostname}?${queryString}`
 		fetchArticle(url);
-	}, [hostname, queryString, windowCount, mainArticle]);
+	}, [hostname, queryString, windowCount]);
 
 	return {
 		mainArticle,
