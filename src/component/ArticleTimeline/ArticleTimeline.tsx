@@ -46,7 +46,6 @@ function ArticleTimeline(props: ArticleTimelineProps) {
 
 		function installObserverOnLastArticle(root: HTMLElement) {
 			const observer = new IntersectionObserver(([entry]) => {
-				(entry.target as HTMLElement).style['backgroundColor'] = 'red'
 				if (entry && entry.isIntersecting) {
 					observer.disconnect()
 					loadArticlesOnScroll()

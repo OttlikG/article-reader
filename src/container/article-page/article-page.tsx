@@ -84,7 +84,6 @@ export default function App() {
 					{!!timelineArticles.length && (
 						<ArticleTimeline timelineArticles={timelineArticles} loadArticlesOnScroll={loadArticlesOnScroll} />
 					)}
-					<button onClick={loadArticlesOnScroll}>Load more</button>
 				</div>
 			</div>
 		</div>
