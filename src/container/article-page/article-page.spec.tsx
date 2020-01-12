@@ -1,11 +1,12 @@
 import React from "react";
 import { mount } from "enzyme";
 import { subDays } from "date-fns";
+import fetchMock from "fetch-mock";
 import mockDate from "../../utils/mocks/date";
 import act from '../../utils/test/act'
-import fetchMock from "fetch-mock";
-import { ArticleFromResponse } from "../article-page/selector";
+import { ArticleFromResponse } from "./selector";
 import ArticlePage from "./article-page";
+import { ArticleViewProps } from '../../component/ArticleView/ArticleView'
 
 describe("ArticlePage", () => {
 	let sampleArticle: ArticleFromResponse;
@@ -31,6 +32,7 @@ describe("ArticlePage", () => {
 
 	afterEach(() => {
 		date();
+		fetchMock.restore()
 	});
 
 	it("fetch articles", async done => {
@@ -54,7 +56,7 @@ describe("ArticlePage", () => {
 
 		const component = mount(<ArticlePage />);
 
-		act(
+		await act(
 			component,
 			() => {
 				const authorName = component
@@ -73,7 +75,7 @@ describe("ArticlePage", () => {
 		);
 	});
 
-	it.only("should retrieve main article", () => {
+	it("should retrieve main article", async () => {
 		const from = subDays(new Date(), 1).toISOString();
 		const url = `https://newsapi.org/v2/everything?from=${from}&sources=cnn&page=1`;
 
@@ -96,10 +98,10 @@ describe("ArticlePage", () => {
 		);
 
 		const component = mount(<ArticlePage />);
-		act(component, () => {
+		await act(component, () => {
 			const ArticleView = component.find('ArticleView')
 
-			expect(ArticleView.props().title).toBe('Article title')
+			expect((ArticleView.props() as ArticleViewProps).articleHeading).toBe('Article title')
 		})
 	});
 });

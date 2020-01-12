@@ -18,10 +18,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "eject": "react-scripts eject",
+    "eslint": "eslint --ext tsx,ts ."
   },
   "engines": {
     "node": "12.x"
@@ -40,7 +38,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "eslint --ext .ts,.tsx .",
+      "pre-commit": "yarn eslint",
       "pre-push": "yarn test && tsc"
     }
   },
@@ -52,7 +50,9 @@
     "@types/jest": "^24.0.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
+    "eslint-plugin-jest": "^23.4.0",
     "fetch-mock": "^8.2.0-beta.2",
+    "husky": "^4.0.7",
     "jest": "^24.9.0",
     "node-fetch": "^2.6.0",
     "ts-jest": "^24.2.0"

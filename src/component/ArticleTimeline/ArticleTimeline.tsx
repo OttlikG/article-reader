@@ -95,53 +95,54 @@ function ArticleTimeline(props: ArticleTimelineProps) {
 			const layoutContainer = document.querySelector('.masonry-root .column-wrapper') as HTMLElement
 			const firstColumnElement = document.querySelector('.masonry-root .first-column') as HTMLElement
 			const secondColumnElement = document.querySelector('.masonry-root .second-column') as HTMLElement
-			
 
-			const firstColumn = [] as HTMLElement[]
-			const secondColumn = [] as HTMLElement[]
+			if (firstColumnElement && secondColumnElement) {
+				const firstColumn = [] as HTMLElement[]
+				const secondColumn = [] as HTMLElement[]
 
-			const firstColumnAccumulatedHeight = [...firstColumnElement.querySelectorAll('.masonry-cell') as NodeListOf<HTMLElement>].reduce((acc, cell) => acc + cell.offsetHeight, 0)
-			const secondColumnAccumulatedHeight = [...secondColumnElement.querySelectorAll('.masonry-cell') as NodeListOf<HTMLElement>].reduce((acc, cell) => acc + cell.offsetHeight, 0)
-			const firstColumnOffsetFromBottom = layoutContainer?.offsetHeight - firstColumnAccumulatedHeight
-			const secondColumnOffsetFromBottom = layoutContainer?.offsetHeight - secondColumnAccumulatedHeight
-			let firstColumnHeight = 0 - firstColumnOffsetFromBottom
-			let secondColumnHeight = 0 - secondColumnOffsetFromBottom
-	
-			Array.prototype.map.call(cellElements, (cell: HTMLElement) => {
-				let column
-				if (firstColumnHeight <= secondColumnHeight) {
-					firstColumnHeight += cell.offsetHeight
-					column = firstColumn
-				} else {
-					secondColumnHeight += cell.offsetHeight
-					column = secondColumn
-				}
-				column.push(cell)
-			})
+				const firstColumnAccumulatedHeight = [...firstColumnElement.querySelectorAll('.masonry-cell') as NodeListOf<HTMLElement>].reduce((acc, cell) => acc + cell.offsetHeight, 0)
+				const secondColumnAccumulatedHeight = [...secondColumnElement.querySelectorAll('.masonry-cell') as NodeListOf<HTMLElement>].reduce((acc, cell) => acc + cell.offsetHeight, 0)
+				const firstColumnOffsetFromBottom = layoutContainer?.offsetHeight - firstColumnAccumulatedHeight
+				const secondColumnOffsetFromBottom = layoutContainer?.offsetHeight - secondColumnAccumulatedHeight
+				let firstColumnHeight = 0 - firstColumnOffsetFromBottom
+				let secondColumnHeight = 0 - secondColumnOffsetFromBottom
+		
+				Array.prototype.map.call(cellElements, (cell: HTMLElement) => {
+					let column
+					if (firstColumnHeight <= secondColumnHeight) {
+						firstColumnHeight += cell.offsetHeight
+						column = firstColumn
+					} else {
+						secondColumnHeight += cell.offsetHeight
+						column = secondColumn
+					}
+					column.push(cell)
+				})
 
-			firstColumn.forEach(cell => {
-				const cells = firstColumnElement.querySelectorAll('.masonry-cell')
-				if (cells.length) {
-					cells[cells.length - 1].after(cell)
-				} else {
-					firstColumnElement?.appendChild(cell)
-				}
+				firstColumn.forEach(cell => {
+					const cells = firstColumnElement.querySelectorAll('.masonry-cell')
+					if (cells.length) {
+						cells[cells.length - 1].after(cell)
+					} else {
+						firstColumnElement?.appendChild(cell)
+					}
 
-			})
+				})
 
-			secondColumn.forEach(cell => {
-				const cells = secondColumnElement.querySelectorAll('.masonry-cell')
-				if (cells.length) {
-					cells[cells.length - 1].after(cell)
-				} else {
-					secondColumnElement?.appendChild(cell)
-				}
-			})
-			
-			setTimeout(() => {
-				const event = new CustomEvent('layoutTimelineFinished')
-				layoutContainer.dispatchEvent(event)
-			}, 2000)
+				secondColumn.forEach(cell => {
+					const cells = secondColumnElement.querySelectorAll('.masonry-cell')
+					if (cells.length) {
+						cells[cells.length - 1].after(cell)
+					} else {
+						secondColumnElement?.appendChild(cell)
+					}
+				})
+				
+				setTimeout(() => {
+					const event = new CustomEvent('layoutTimelineFinished')
+					layoutContainer.dispatchEvent(event)
+				}, 2000)
+			}
 		}
 	}, [timelineArticles.length])
 
