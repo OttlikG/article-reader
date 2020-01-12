@@ -38,6 +38,12 @@
       "last 1 safari version"
     ]
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "eslint --ext .ts,.tsx .",
+      "pre-push": "yarn test && tsc"
+    }
+  },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
