@@ -54,7 +54,7 @@
     "fetch-mock": "^8.2.0-beta.2",
     "husky": "^4.0.7",
     "jest": "^24.9.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "ts-jest": "^24.2.0"
   }
 }
